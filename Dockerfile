@@ -6,29 +6,36 @@ ENV PATH="${PATH}:/opt/ts3server"
 ENV TEAMSPEAK_CHECKSUM=775a5731a9809801e4c8f9066cd9bc562a1b368553139c1249f2a0740d50041e
 ENV TEAMSPEAK_URL=https://files.teamspeak-services.com/releases/server/3.13.7/teamspeak3-server_linux_amd64-3.13.7.tar.bz2
 
-ENV TZ='Asia/Seoul'
+ENV TZ=Asia/Seoul
 ENV LC_ALL=ko_KR.UTF-8
 ENV LANG=ko_KR.UTF-8
 ENV LANGUAGE=ko_KR:ko
 
-RUN dpkg --add-architecture amd64 \
-    && apt-get update \
+RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-    binfmt-support \
     bzip2 \
     ca-certificates \
     locales \
-    libc6:amd64 \
     libpipeline1 \
-    libstdc++6:amd64 \
     lsb-base \
-    qemu-user-static \
     tini \
-    wget \    
+    wget \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* && \
-    \
-    sed -i -e 's/# ko_KR.UTF-8 UTF-8/ko_KR.UTF-8 UTF-8/' /etc/locale.gen && locale-gen
+    && rm -rf /var/lib/apt/lists/* \
+    && sed -i -e 's/# ko_KR.UTF-8 UTF-8/ko_KR.UTF-8 UTF-8/' /etc/locale.gen \
+    && locale-gen
+
+RUN case "$TARGETARCH" in \
+        "arm64") dpkg --add-architecture amd64 \
+                apt-get update && apt-get install -y --no-install-recommends \
+                binfmt-support \
+                libc6:amd64 \
+                libstdc++6:amd64 \
+                qemu-user-static ;; \
+        "amd64") apt-get update && apt-get install -y --no-install-recommends ;; \
+    esac \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN set -eux; \
     addgroup --gid 1001 ts3server; \

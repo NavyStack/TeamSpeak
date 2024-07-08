@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 set -e
 
 # Ensure the TeamSpeak 3 server does not run with root permissions
@@ -48,8 +48,8 @@ if [ "$1" = 'ts3server' ]; then
         "query_protocols=${TS3SERVER_QUERY_PROTOCOLS:-raw}" \
         "query_timeout=${TS3SERVER_QUERY_TIMEOUT:-300}" \
         "query_ssh_rsa_host_key=${TS3SERVER_QUERY_SSH_RSA_HOST_KEY:-ssh_host_rsa_key}" \
-        "query_ip_allowlist=${TS3SERVER_IP_WHITELIST:-query_ip_allowlist.txt}" \
-        "query_ip_denylist=${TS3SERVER_IP_BLACKLIST:-query_ip_denylist.txt}" \
+        "query_ip_allowlist=${TS3SERVER_IP_ALLOWLIST:-query_ip_allowlist.txt}" \
+        "query_ip_denylist=${TS3SERVER_IP_DENYLIST:-query_ip_denylist.txt}" \
         "dbplugin=${TS3SERVER_DB_PLUGIN:-ts3db_sqlite3}" \
         "dbpluginparameter=${TS3SERVER_DB_PLUGINPARAMETER:-/var/run/ts3server/ts3db.ini}" \
         "dbsqlpath=${TS3SERVER_DB_SQLPATH:-/opt/ts3server/sql/}" \
@@ -89,12 +89,26 @@ if [ "$1" = 'ts3server' ]; then
         > /var/run/ts3server/ts3db.ini
 fi
 
-# Adjust command line arguments to point to ts3server binary
-if [ "$1" = 'ts3server' ]; then
-    args=( "$@" )
-    args[0]=/opt/ts3server/ts3server
-    set -- "${args[@]}"
-fi
-
-# Execute the appropriate command (qemu)
-exec "/usr/bin/qemu-x86_64-static" "$@"
+ARCH=$(uname -m)
+case "$ARCH" in
+    "x86_64")
+        if [ "$1" = 'ts3server' ]; then
+            args=( "$@" )
+            args[0]=/opt/ts3server/ts3server
+            set -- "${args[@]}"
+        fi
+        exec "$@"
+        ;;
+    "aarch64")
+        if [ "$1" = 'ts3server' ]; then
+            args=( "$@" )
+            args[0]=/opt/ts3server/ts3server_arm64
+            set -- "${args[@]}"
+        fi
+        exec "/usr/bin/qemu-aarch64-static" "$@"
+        ;;
+    *)
+        echo "Unsupported architecture: $ARCH"
+        exit 1
+        ;;
+esac

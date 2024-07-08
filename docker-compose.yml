@@ -1,14 +1,17 @@
 services:
-  teamspeak3-dev:
-    container_name: teamspeak3-dev
+  teamspeak3:
+    container_name: teamspeak3
     restart: unless-stopped
-    image: navystack/teamspeak3:latest
+    image: ghcr.io/navystack/teamspeak:3.13.7
     volumes:
       - ./data/:/var/ts3server/
-    ports:
-      - 4567:4567
     environment:
+      - TIME_ZONE=Asia/Seoul
       - TS3SERVER_LICENSE=accept
+    ports:
+      - '9987:9987/udp'
+      - '10011:10011/tcp'
+      - '30033:30033/tcp'
     networks:
       - internal
 
