@@ -1,0 +1,16 @@
+services:
+  teamspeak3-dev:
+    container_name: teamspeak3-dev
+    restart: unless-stopped
+    image: navystack/teamspeak3:latest
+    volumes:
+      - ./data/:/var/ts3server/
+    ports:
+      - 4567:4567
+    environment:
+      - TS3SERVER_LICENSE=accept
+    networks:
+      - internal
+
+networks:
+  internal:
