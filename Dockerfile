@@ -1,8 +1,9 @@
 FROM debian:bookworm-slim
 
+ARG TARGETARCH
 ENV GOSU_VERSION="1.17"
-
 ENV PATH="${PATH}:/opt/ts3server"
+ENV LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/local/lib/"
 ENV TEAMSPEAK_CHECKSUM=775a5731a9809801e4c8f9066cd9bc562a1b368553139c1249f2a0740d50041e
 ENV TEAMSPEAK_URL=https://files.teamspeak-services.com/releases/server/3.13.7/teamspeak3-server_linux_amd64-3.13.7.tar.bz2
 
@@ -26,7 +27,7 @@ RUN apt-get update \
     && locale-gen
 
 RUN case "$TARGETARCH" in \
-        "arm64") dpkg --add-architecture amd64 \
+        "arm64") dpkg --add-architecture amd64; \
                 apt-get update && apt-get install -y --no-install-recommends \
                 binfmt-support \
                 libc6:amd64 \

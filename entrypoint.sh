@@ -102,10 +102,10 @@ case "$ARCH" in
     "aarch64")
         if [ "$1" = 'ts3server' ]; then
             args=( "$@" )
-            args[0]=/opt/ts3server/ts3server_arm64
+            args[0]=/opt/ts3server/ts3server
             set -- "${args[@]}"
         fi
-        exec "/usr/bin/qemu-aarch64-static" "$@"
+        exec "/usr/bin/qemu-x86_64-static" "$@"
         ;;
     *)
         echo "Unsupported architecture: $ARCH"
