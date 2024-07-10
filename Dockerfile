@@ -82,7 +82,7 @@ RUN set -eux; \
 VOLUME /var/ts3server/
 WORKDIR /var/ts3server/
 
-EXPOSE 9987/udp 10011 30033
+EXPOSE 9987/udp 10011/tcp 30033/tcp
 
 COPY entrypoint.sh /opt/ts3server
 
