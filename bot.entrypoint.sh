@@ -91,5 +91,6 @@ echo "PID: $PID"
 
 # Keep the script running
 while true; do
-  tail -f /dev/null & wait ${!}
+  tail -f /dev/null &
+  wait ${!}
 done

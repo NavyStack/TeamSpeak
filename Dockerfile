@@ -39,9 +39,9 @@ RUN case "$TARGETARCH" in \
     && rm -rf /var/lib/apt/lists/*
 
 RUN set -eux; \
-    addgroup --gid 1001 ts3server; \
-    adduser -u 1001 --no-create-home --home /var/ts3server --ingroup ts3server --shell /usr/sbin/nologin --disabled-password ts3server; \
-    install -d -o ts3server -g ts3server -m 775 /var/ts3server /var/run/ts3server /opt/ts3server
+    groupadd --gid 1001 ts3server; \
+    useradd --uid 1001 --gid 1001 --home-dir /var/ts3server ts3server; \
+    install -d -o ts3server -g ts3server -m 700 /var/ts3server /var/run/ts3server /opt/ts3server
 
 RUN set -eux; \
     # save list of currently installed packages for later so we can clean up
