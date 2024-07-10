@@ -52,11 +52,11 @@ jobs:
             ghcr.io/${{ env.REPO_OWNER_LOWERCASE }}/teamspeak:3.13.7
             ghcr.io/${{ env.REPO_OWNER_LOWERCASE }}/teamspeak:3.13
             ghcr.io/${{ env.REPO_OWNER_LOWERCASE }}/teamspeak:3
-            navystack/iventoy:teamspeak:nightly-${{ env.CURRENT_DATE_KST }}
-            navystack/iventoy:teamspeak:${{ env.CURRENT_DATE_KST }}
-            navystack/iventoy:teamspeak:3.13.7
-            navystack/iventoy:teamspeak:3.13
-            navystack/iventoy:teamspeak:3
+            navystack/teamspeak:nightly-${{ env.CURRENT_DATE_KST }}
+            navystack/teamspeak:${{ env.CURRENT_DATE_KST }}
+            navystack/teamspeak:3.13.7
+            navystack/teamspeak:3.13
+            navystack/teamspeak:3
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/arm64, linux/amd64
           outputs: type=image,push=true
