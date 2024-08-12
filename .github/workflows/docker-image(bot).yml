@@ -37,7 +37,7 @@ jobs:
         run: echo "CURRENT_DATE_KST=$(date +'%Y%m%d-%H%M%S' -d '+9 hours')" >> $GITHUB_ENV
 
       - name: Build and push
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           file: bot.Dockerfile
           push: true
